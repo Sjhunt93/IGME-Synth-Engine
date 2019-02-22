@@ -22,7 +22,7 @@ public:
     //==============================================================================
     MainContentComponent()
     {
-        setSize (800, 600);
+        setSize (500, 300);
 
         // specify the number of input and output channels that we want to open
         setAudioChannels (0, 2);
@@ -46,6 +46,7 @@ public:
         // tell the component to listen for OSC messages matching this address:
         addListener (this);
         
+        addAndMakeVisible(audioMain);
     }
 
     ~MainContentComponent()
@@ -60,6 +61,7 @@ public:
                 const int track = message[0].getInt32();
                 const int soundId = message[1].getInt32();
                 audioMain.setSoundForTrack(track, soundId);
+                std::cout << "Load preset " << track <<  " : " << soundId << "\n";
             }
         }
         else if (message.getAddressPattern().toString().startsWith(Coms::getPresets)) {
@@ -125,6 +127,8 @@ public:
     {
         // (Our component is opaque, so we must completely fill the background with a solid colour)
         g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+        g.setColour(Colours::white);
+        g.drawText("IGME Sound Engine Running ", 0, 0, getWidth(), getHeight(), Justification::centred);
 
         // You can add your drawing code here!
     }
@@ -134,6 +138,7 @@ public:
         // This is called when the MainContentComponent is resized.
         // If you add any child components, this is where you should
         // update their positions.
+        audioMain.setBounds(0, 0, getWidth(), getHeight());
     }
 
 

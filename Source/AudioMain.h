@@ -62,6 +62,8 @@ private:
 
 //==========================================================================
 
+//    AudioDeviceManager
+    
     AudioFormatManager formatManager;
     ScopedPointer<AudioFormatReaderSource> readerSource;
     AudioTransportSource transportSource;
@@ -71,6 +73,8 @@ private:
     FluidSynthObject * fluidSynth;
     
     std::vector<MidiInput *> inputs;
+    
+    AudioDeviceSelectorComponent audioSettingsComp;
 };
 
 

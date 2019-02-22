@@ -12,8 +12,11 @@
 
 #define REPEAT(B,A) for (int ghjhg = 0; ghjhg < A; ghjhg++) {B;}
 
-AudioMain::AudioMain() :   state (Stopped)
+AudioMain::AudioMain() :   state (Stopped), audioSettingsComp(deviceManager, 0, 0, 2,2, false, false, true, true )
 {
+    
+    
+    
     fluidSynth = new FluidSynthObject();
     setAudioChannels (0, 2);
     formatManager.registerBasicFormats();
@@ -39,6 +42,12 @@ AudioMain::AudioMain() :   state (Stopped)
     File soundFont = tutorialSettings.getChildFile("GeneralUser GS MuseScore v1.442.sf2");
     jassert(soundFont.exists());
     fluidSynth->loadSoundfont(soundFont.getFullPathName());
+    
+    
+    addAndMakeVisible(audioSettingsComp);
+    
+    
+//    DialogWindow::showModalDialog ("Audio Settings", &audioSettingsComp, centerComp, Colours::azure, true);
     
 }
 AudioMain::~AudioMain()
@@ -72,7 +81,7 @@ void AudioMain::releaseResources()
 
 void AudioMain::resized()
 {
-    
+    audioSettingsComp.setBounds(0, 0, 400, 300);
 }
 
 void AudioMain::changeListenerCallback (ChangeBroadcaster* source)

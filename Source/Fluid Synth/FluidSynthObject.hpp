@@ -13,7 +13,7 @@
 //Ughh this is so stupid.. not sure why i cant just include that file as is...
 
 //This will have to be changed for each enviroment
-#include "/Users/sj4-hunt/Desktop/Music Content Analysis Library/externals/fluidsynth_mac/fluidsynth/fluidsynth/include/fluidsynth.h"
+#include "/Users/sj4-hunt/Documents/Code/music-content-analysis-sequencing-library/externals/fluidsynth_mac/fluidsynth/fluidsynth/include/fluidsynth.h"
 #include "FluidSynthPreset.hpp"
 
 
