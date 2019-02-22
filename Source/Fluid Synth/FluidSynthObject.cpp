@@ -124,6 +124,13 @@ void FluidSynthObject::loadSoundfont(const String& soundfont)
     
 }
 
+void FluidSynthObject::setVolume (int channel, float volume)
+{
+//    fluid_synth_set_chan
+//    fluid_synth_set_ch
+    fluid_synth_cc(synth, channel, 7, (int) (volume*10));
+}
+
 void FluidSynthObject::processNote(int note, int velocity, int channel)
 {
     std::cerr << "FluidSynthObject note: " << note << " " << velocity << std::endl;

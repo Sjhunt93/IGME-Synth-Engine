@@ -19,6 +19,9 @@ namespace Coms {
     static const String preset = root + "preset";
     static const String midi = root + "midi";
     
+    static const String presetSent = root + "allPresetsSent";
+    
+    static const String trackVolume = root + "trackVolume";
     static const String synthStart = root + "synthstart";
     static const String IGMEStart = root + "igmestart";
     

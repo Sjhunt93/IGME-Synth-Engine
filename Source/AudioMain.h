@@ -45,7 +45,7 @@ public:
 
 //    AudioEngineFileIO & getFileIO ();
     void setSoundForTrack (const int trackId, const int soundId);
-    
+    void setVolumeForTrack (const int trackId, const float volume);
     FluidSynthObject & getFluidSynthObject ();
     
 private:

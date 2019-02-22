@@ -32,6 +32,7 @@ public:
     
     void processNote (int noteNumber, int velocity, int channel);
     void loadSound (int channel, int prgmChange, int bank);
+    void setVolume (int channel, float volume);
     void MIDIIN (MidiMessage message);
     
     

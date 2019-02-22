@@ -47,6 +47,7 @@ public:
         addListener (this);
         
         addAndMakeVisible(audioMain);
+        oscSender.send(OSCMessage(Coms::synthStart));
     }
 
     ~MainContentComponent()
@@ -74,6 +75,7 @@ public:
                 OSCMessage message(Coms::preset, fSynthPreset.name, fSynthPreset.number, fSynthPreset.bank, fSynthPreset.uniqueId);
                 oscSender.send(message);
             }
+            oscSender.send(OSCMessage(Coms::presetSent));
         }
         else if (message.getAddressPattern().toString().startsWith(Coms::midi)) {
             if (message.size() == 3) {
@@ -85,6 +87,16 @@ public:
                 audioMain.handleIncomingMidiMessage(nullptr, m);
                 printf("%i %i %i \n", s1, d1, d2);
             }
+        }
+        else if (message.getAddressPattern().toString().startsWith(Coms::trackVolume)) {
+            if (message.size() == 2) {
+                if (message[0].isInt32() && message[1].isFloat32()) {
+                    const int track = message[0].getInt32();
+                    const float vol = message[1].getFloat32();
+                    audioMain.setVolumeForTrack(track, vol);
+                }
+            }
+
         }
     }
     

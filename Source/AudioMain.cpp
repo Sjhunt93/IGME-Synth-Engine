@@ -141,6 +141,11 @@ void AudioMain::setSoundForTrack (const int trackId, const int soundId)
     }
 }
 
+void AudioMain::setVolumeForTrack (const int trackId, const float volume)
+{
+    fluidSynth->setVolume(trackId, volume);
+}
+
 FluidSynthObject & AudioMain::getFluidSynthObject ()
 {
     return *fluidSynth;
