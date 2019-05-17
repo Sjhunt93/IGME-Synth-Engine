@@ -3,21 +3,20 @@
 
     This file was auto-generated!
 
-    It contains the basic startup code for a Juce application.
+    It contains the basic startup code for a JUCE application.
 
   ==============================================================================
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
-Component* createMainContentComponent();
+#include "MainComponent.h"
 
 //==============================================================================
-class IGMESynthApplication  : public JUCEApplication
+class IGMESynthWindowsApplication  : public JUCEApplication
 {
 public:
     //==============================================================================
-    IGMESynthApplication() {}
+    IGMESynthWindowsApplication() {}
 
     const String getApplicationName() override       { return ProjectInfo::projectName; }
     const String getApplicationVersion() override    { return ProjectInfo::versionString; }
@@ -28,7 +27,7 @@ public:
     {
         // This method is where you should put your application's initialisation code..
 
-        mainWindow = new MainWindow (getApplicationName());
+        mainWindow.reset (new MainWindow (getApplicationName()));
     }
 
     void shutdown() override
@@ -56,7 +55,7 @@ public:
     //==============================================================================
     /*
         This class implements the desktop window that contains an instance of
-        our MainContentComponent class.
+        our MainComponent class.
     */
     class MainWindow    : public DocumentWindow
     {
@@ -67,7 +66,7 @@ public:
                                                     DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (createMainContentComponent(), true);
+            setContentOwned (new MainComponent(), true);
             setResizable (true, true);
 
             centreWithSize (getWidth(), getHeight());
@@ -94,9 +93,9 @@ public:
     };
 
 private:
-    ScopedPointer<MainWindow> mainWindow;
+    std::unique_ptr<MainWindow> mainWindow;
 };
 
 //==============================================================================
 // This macro generates the main() routine that launches the app.
-START_JUCE_APPLICATION (IGMESynthApplication)
+START_JUCE_APPLICATION (IGMESynthWindowsApplication)

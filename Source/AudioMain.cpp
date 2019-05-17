@@ -16,9 +16,9 @@ AudioMain::AudioMain() :   state (Stopped), audioSettingsComp(deviceManager, 0, 
 {
     
     
-    
+	start = false;
     fluidSynth = new FluidSynthObject();
-    setAudioChannels (0, 2);
+    setAudioChannels (2, 2);
     formatManager.registerBasicFormats();
     
     //For now this will be picking up the outgoing calls from the IOMidiInterface class.
@@ -39,22 +39,25 @@ AudioMain::AudioMain() :   state (Stopped), audioSettingsComp(deviceManager, 0, 
     
     File tutorialSettings = File::getSpecialLocation(File::SpecialLocationType::currentApplicationFile ).getChildFile("Contents").getChildFile("Resources");
     
-    File soundFont = tutorialSettings.getChildFile("GeneralUser GS MuseScore v1.442.sf2");
+    File soundFont = ("C:\\Users\\Sam\\Documents\\code projects\\IGME-Synth-Engine\\Source\\GeneralUser GS MuseScore v1.442.sf2");
+		//tutorialSettings.getChildFile("GeneralUser GS MuseScore v1.442.sf2");
     jassert(soundFont.exists());
-    fluidSynth->loadSoundfont(soundFont.getFullPathName());
+    //fluidSynth->loadSoundfont(soundFont.getFullPathName());
     
     
     addAndMakeVisible(audioSettingsComp);
     
-    
+	
 //    DialogWindow::showModalDialog ("Audio Settings", &audioSettingsComp, centerComp, Colours::azure, true);
     
 }
 AudioMain::~AudioMain()
 {
+	delete fluidSynth;
+
     shutdownAudio();
 
-    delete fluidSynth;
+
     
     for (int i = 0; i < inputs.size(); i++) {
         inputs[i]->stop();
@@ -69,8 +72,12 @@ void AudioMain::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 
 void AudioMain::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-    bufferToFill.clearActiveBufferRegion();
-    fluidSynth->getNextAudioBlock(bufferToFill);
+	
+	static int c = 0;
+		bufferToFill.clearActiveBufferRegion();
+		fluidSynth->getNextAudioBlock(bufferToFill);
+		c++;
+	
 }
 
 void AudioMain::releaseResources()
@@ -124,6 +131,7 @@ void AudioMain::changeState (TransportState newState)
 }
 void AudioMain::handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message)
 {
+	start = true;
    fluidSynth->MIDIIN(message);
 }
 

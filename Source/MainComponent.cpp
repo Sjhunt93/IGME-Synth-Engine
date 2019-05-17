@@ -6,166 +6,152 @@
   ==============================================================================
 */
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "AudioMain.h"
+#include "MainComponent.h"
 #include "coms.h"
 //==============================================================================
-/*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
-class MainContentComponent   : public AudioAppComponent,
-private OSCReceiver,
-private OSCReceiver::Listener<OSCReceiver::RealtimeCallback>
+MainComponent::MainComponent()
 {
-public:
-    //==============================================================================
-    MainContentComponent()
-    {
-        setSize (500, 300);
+    // Make sure you set the size of the component after
+    // you add any child components.
+    setSize (800, 600);
 
-        // specify the number of input and output channels that we want to open
-        setAudioChannels (0, 2);
-       // audioMain.setSoundForTrack(0, 5);
-        
-        const int listenPort = 9003;
-        const int sendPort = 9004;
-        
-        if (! connect (listenPort)) { //listen
-            //alert
-            AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1010 already in use", "Please restart aserve.");
-            std::cout << "Error opening 1010 for listening \n";
-        }
-        
-        if (! oscSender.connect ("127.0.0.1", sendPort)) {
-            //error
-            AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1011 already in use", "Please restart aserve.");
-            std::cout << "Error opening 1011 for reciving \n";
-        }
-        
-        // tell the component to listen for OSC messages matching this address:
-        addListener (this);
-        
-        addAndMakeVisible(audioMain);
-        oscSender.send(OSCMessage(Coms::synthStart));
-    }
+	fSynth.loadSoundfont("C:\\Users\\Sam\\Documents\\code projects\\IGME-Synth-Engine\\Source\\GeneralUser GS MuseScore v1.442.sf2");
 
-    ~MainContentComponent()
-    {
-        shutdownAudio();
-    }
+	addAndMakeVisible(btn);
+	btn.onClick = [this]()
+	{
+		fSynth.processNote(60, 127, 0);
+	};
+    // specify the number of input and output channels that we want to open
+    setAudioChannels (2, 2);
 
-    void oscMessageReceived (const OSCMessage& message) override
-    {
-         if (message.getAddressPattern().toString().startsWith(Coms::loadPreset)) {
-            if (message[0].isInt32() && message[1].isInt32()) {
-                const int track = message[0].getInt32();
-                const int soundId = message[1].getInt32();
-                audioMain.setSoundForTrack(track, soundId);
-                std::cout << "Load preset " << track <<  " : " << soundId << "\n";
-            }
-        }
-        else if (message.getAddressPattern().toString().startsWith(Coms::getPresets)) {
-            /*
-             Que up message!
-             */
-            const int total = audioMain.getFluidSynthObject().getPresets()->getTotalPresets();
-            for (int i = 0; i < total; i++) {
-                FluidSynthPreset::FSPreset fSynthPreset = audioMain.getFluidSynthObject().getPresets()->getPreset(i);
-                OSCMessage message(Coms::preset, fSynthPreset.name, fSynthPreset.number, fSynthPreset.bank, fSynthPreset.uniqueId);
-                oscSender.send(message);
-            }
-            oscSender.send(OSCMessage(Coms::presetSent));
-        }
-        else if (message.getAddressPattern().toString().startsWith(Coms::midi)) {
-            if (message.size() == 3) {
-                int s1 = message[0].getInt32();
-                int d1 = message[1].getInt32();
-                int d2 = message[2].getInt32();
-                
-                MidiMessage m(s1, d1, d2);
-                audioMain.handleIncomingMidiMessage(nullptr, m);
-                printf("%i %i %i \n", s1, d1, d2);
-            }
-        }
-        else if (message.getAddressPattern().toString().startsWith(Coms::trackVolume)) {
-            if (message.size() == 2) {
-                if (message[0].isInt32() && message[1].isFloat32()) {
-                    const int track = message[0].getInt32();
-                    const float vol = message[1].getFloat32();
-                    audioMain.setVolumeForTrack(track, vol);
-                }
-            }
+	{
+		//set up OSC
 
-        }
-    }
-    
-    //==============================================================================
-    void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override
-    {
-        // This function will be called when the audio device is started, or when
-        // its settings (i.e. sample rate, block size, etc) are changed.
+		const int listenPort = 9003;
+		const int sendPort = 9004;
 
-        // You can use this function to initialise any resources you might need,
-        // but be careful - it will be called on the audio thread, not the GUI thread.
+		if (!connect(listenPort)) { //listen
+			//alert
+			AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1010 already in use", "Please restart aserve.");
+			std::cout << "Error opening 1010 for listening \n";
+		}
 
-        // For more details, see the help for AudioProcessor::prepareToPlay()
-        audioMain.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    }
+		if (!oscSender.connect("127.0.0.1", sendPort)) {
+			//error
+			AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1011 already in use", "Please restart aserve.");
+			std::cout << "Error opening 1011 for reciving \n";
+		}
 
-    void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override
-    {
-        // Your audio-processing code goes here!
+		// tell the component to listen for OSC messages matching this address:
+		addListener(this);
 
-        // For more details, see the help for AudioProcessor::getNextAudioBlock()
+		oscSender.send(OSCMessage(Coms::synthStart));
+	}
+}
 
-        // Right now we are not producing any data, in which case we need to clear the buffer
-        // (to prevent the output of random noise)
-        bufferToFill.clearActiveBufferRegion();
-        audioMain.getNextAudioBlock(bufferToFill);
-    }
+MainComponent::~MainComponent()
+{
+    // This shuts down the audio device and clears the audio source.
+    shutdownAudio();
+}
+void MainComponent::oscMessageReceived(const OSCMessage& message)
+{
+	if (message.getAddressPattern().toString().startsWith(Coms::loadPreset)) {
+		if (message[0].isInt32() && message[1].isInt32()) {
+			const int track = message[0].getInt32();
+			const int soundId = message[1].getInt32();
+			FluidSynthPreset::FSPreset preset = fSynth.getPresets()->getPreset(soundId);
+			fSynth.loadSound(track, preset.number, preset.bank);
+			std::cout << "Load preset " << track << " : " << soundId << "\n";
+		}
+	}
+	else if (message.getAddressPattern().toString().startsWith(Coms::getPresets)) {
+		/*
+		 Que up message!
+		 */
+		const int total = fSynth.getPresets()->getTotalPresets();
+		for (int i = 0; i < total; i++) {
+			FluidSynthPreset::FSPreset fSynthPreset = fSynth.getPresets()->getPreset(i);
+			OSCMessage message(Coms::preset, fSynthPreset.name, fSynthPreset.number, fSynthPreset.bank, fSynthPreset.uniqueId);
+			oscSender.send(message);
+		}
+		oscSender.send(OSCMessage(Coms::presetSent));
+	}
+	else if (message.getAddressPattern().toString().startsWith(Coms::midi)) {
+		if (message.size() == 3) {
+			int s1 = message[0].getInt32();
+			int d1 = message[1].getInt32();
+			int d2 = message[2].getInt32();
 
-    void releaseResources() override
-    {
-        // This will be called when the audio device stops, or when it is being
-        // restarted due to a setting change.
+			MidiMessage m(s1, d1, d2);
+			fSynth.MIDIIN(m);
+			printf("%i %i %i \n", s1, d1, d2);
+		}
+	}
+	else if (message.getAddressPattern().toString().startsWith(Coms::trackVolume)) {
+		if (message.size() == 2) {
+			if (message[0].isInt32() && message[1].isFloat32()) {
+				const int track = message[0].getInt32();
+				const float vol = message[1].getFloat32();
+				fSynth.setVolume(track, vol);
+			}
+		}
 
-        // For more details, see the help for AudioProcessor::releaseResources()
-        audioMain.releaseResources();
-    }
+	}
+}
 
-    //==============================================================================
-    void paint (Graphics& g) override
-    {
-        // (Our component is opaque, so we must completely fill the background with a solid colour)
-        g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-        g.setColour(Colours::white);
-        g.drawText("IGME Sound Engine Running ", 0, 0, getWidth(), getHeight(), Justification::centred);
+//==============================================================================
+void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
+{
+    // This function will be called when the audio device is started, or when
+    // its settings (i.e. sample rate, block size, etc) are changed.
 
-        // You can add your drawing code here!
-    }
+    // You can use this function to initialise any resources you might need,
+    // but be careful - it will be called on the audio thread, not the GUI thread.
 
-    void resized() override
-    {
-        // This is called when the MainContentComponent is resized.
-        // If you add any child components, this is where you should
-        // update their positions.
-        audioMain.setBounds(0, 0, getWidth(), getHeight());
-    }
+    // For more details, see the help for AudioProcessor::prepareToPlay()
+	fSynth.prepareToPlay(samplesPerBlockExpected, sampleRate);
+
+}
+
+void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
+{
+    // Your audio-processing code goes here!
+
+    // For more details, see the help for AudioProcessor::getNextAudioBlock()
+
+    // Right now we are not producing any data, in which case we need to clear the buffer
+    // (to prevent the output of random noise)
+    bufferToFill.clearActiveBufferRegion();
+	fSynth.getNextAudioBlock(bufferToFill);
+
+}
+
+void MainComponent::releaseResources()
+{
+    // This will be called when the audio device stops, or when it is being
+    // restarted due to a setting change.
+	fSynth.releaseResources();
 
 
-private:
-    //==============================================================================
-    AudioMain   audioMain;
-    OSCSender   oscSender;
-    // Your private member variables go here...
+    // For more details, see the help for AudioProcessor::releaseResources()
+}
 
+//==============================================================================
+void MainComponent::paint (Graphics& g)
+{
+    // (Our component is opaque, so we must completely fill the background with a solid colour)
+    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
-};
+    // You can add your drawing code here!
+}
 
+void MainComponent::resized()
+{
+    // This is called when the MainContentComponent is resized.
+    // If you add any child components, this is where you should
+    // update their positions.
+	btn.setBounds(50, 50, 400, 100);
 
-// (This function is called by the app startup code to create our main component)
-Component* createMainContentComponent()     { return new MainContentComponent(); }
-
-
+}

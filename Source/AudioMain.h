@@ -75,6 +75,7 @@ private:
     std::vector<MidiInput *> inputs;
     
     AudioDeviceSelectorComponent audioSettingsComp;
+	bool start;
 };
 
 
