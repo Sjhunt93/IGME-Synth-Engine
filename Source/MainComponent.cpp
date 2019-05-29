@@ -22,6 +22,7 @@ public:
     //==============================================================================
     MainContentComponent()
     {
+
         setSize (500, 300);
 
         // specify the number of input and output channels that we want to open
