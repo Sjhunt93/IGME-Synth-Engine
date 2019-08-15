@@ -34,13 +34,13 @@ public:
         
         if (! connect (listenPort)) { //listen
             //alert
-            AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1010 already in use", "Please restart aserve.");
+            AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1010 already in use", "Please restart.");
             std::cout << "Error opening 1010 for listening \n";
         }
         
         if (! oscSender.connect ("127.0.0.1", sendPort)) {
             //error
-            AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1011 already in use", "Please restart aserve.");
+            AlertWindow::showMessageBox(AlertWindow::AlertIconType::WarningIcon, "Error port 1011 already in use", "Please restart.");
             std::cout << "Error opening 1011 for reciving \n";
         }
         
@@ -142,6 +142,8 @@ public:
         g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
         g.setColour(Colours::white);
         g.drawText("IGME Sound Engine Running ", 0, 0, getWidth(), getHeight(), Justification::centred);
+        
+        g.drawText("1.0.1 ", 5, getHeight() - 20, getWidth(), 20, Justification::left);
 
         // You can add your drawing code here!
     }

@@ -121,6 +121,9 @@ void FluidSynthObject::loadSoundfont(const String& soundfont)
     }
 #endif
     
+    for (int i = 0; i < 16; i++) {
+        setVolume(i, 5);
+    }
     
 }
 
