@@ -916,9 +916,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9E281B31421CBC27162766D9 /* IGME Synth - App */ = {
+		9E281B31421CBC27162766D9 /* IGMESynth */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EC3416D1A9690A49DFD8C038 /* Build configuration list for PBXNativeTarget "IGME Synth - App" */;
+			buildConfigurationList = EC3416D1A9690A49DFD8C038 /* Build configuration list for PBXNativeTarget "IGMESynth" */;
 			buildPhases = (
 				2351744BB1EF3AA2F2F12A02 /* Resources */,
 				4C94820032F2E951B69FCC6A /* Sources */,
@@ -928,7 +928,7 @@
 			);
 			dependencies = (
 			);
-			name = "IGME Synth - App";
+			name = IGMESynth;
 			productName = "IGME Synth";
 			productReference = 8B6CFD55DA3DCADF8C00CD41 /* IGME Synth.app */;
 			productType = "com.apple.product-type.application";
@@ -962,7 +962,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 527A51327154F7F2974CD156 /* Build configuration list for PBXProject "IGME Synth" */;
+			buildConfigurationList = 527A51327154F7F2974CD156 /* Build configuration list for PBXProject "IGMESynth" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -973,7 +973,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9E281B31421CBC27162766D9 /* IGME Synth - App */,
+				9E281B31421CBC27162766D9 /* IGMESynth */,
 			);
 		};
 /* End PBXProject section */
@@ -1201,6 +1201,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.IGMESynth;
+				PRODUCT_NAME = IGMESynth;
 				SDKROOT_ppc = macosx10.5;
 				USE_HEADERMAP = YES;
 			};
@@ -1243,6 +1244,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.IGMESynth;
+				PRODUCT_NAME = IGMESynth;
 				SDKROOT_ppc = macosx10.5;
 				USE_HEADERMAP = YES;
 			};
@@ -1292,7 +1294,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		527A51327154F7F2974CD156 /* Build configuration list for PBXProject "IGME Synth" */ = {
+		527A51327154F7F2974CD156 /* Build configuration list for PBXProject "IGMESynth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8A20280989EAFB060743C5E0 /* Debug */,
@@ -1301,7 +1303,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		EC3416D1A9690A49DFD8C038 /* Build configuration list for PBXNativeTarget "IGME Synth - App" */ = {
+		EC3416D1A9690A49DFD8C038 /* Build configuration list for PBXNativeTarget "IGMESynth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				91FFDBF3E4276D5478F04956 /* Debug */,

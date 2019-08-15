@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9E281B31421CBC27162766D9"
                BuildableName = "IGME Synth.app"
-               BlueprintName = "IGME Synth - App"
-               ReferencedContainer = "container:IGME Synth.xcodeproj">
+               BlueprintName = "IGMESynth"
+               ReferencedContainer = "container:IGMESynth.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9E281B31421CBC27162766D9"
             BuildableName = "IGME Synth.app"
-            BlueprintName = "IGME Synth - App"
-            ReferencedContainer = "container:IGME Synth.xcodeproj">
+            BlueprintName = "IGMESynth"
+            ReferencedContainer = "container:IGMESynth.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9E281B31421CBC27162766D9"
-            BuildableName = "IGME Synth.app"
-            BlueprintName = "IGME Synth - App"
-            ReferencedContainer = "container:IGME Synth.xcodeproj">
+            BuildableName = "IGMESynth.app"
+            BlueprintName = "IGMESynth"
+            ReferencedContainer = "container:IGMESynth.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -76,8 +76,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9E281B31421CBC27162766D9"
             BuildableName = "IGME Synth.app"
-            BlueprintName = "IGME Synth - App"
-            ReferencedContainer = "container:IGME Synth.xcodeproj">
+            BlueprintName = "IGMESynth"
+            ReferencedContainer = "container:IGMESynth.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
